@@ -26,8 +26,17 @@ with open("data\data_dictionary.json", "r") as jsonfile:
 
 print("Missing values:\n", data.isnull().sum())
 
+#to_keep = df[df.groupby(['a', 'b', 'c'])['result'].transform('nunique') == 1] #duplicates
+#duplicate_rows = df[df.duplicated()]
+#print(duplicate_rows)
+#df.drop_duplicates(inplace=True)
+
 data_cleaned= data.drop_duplicates(inplace=True)
+
+assert data_cleaned{"Age"}.between(0,120).all(),"out of range"
+
 #for columns in  df:  #convert csv to string? 
+
 
 
 #def columns
@@ -40,7 +49,7 @@ data_cleaned= data.drop_duplicates(inplace=True)
              #https://stackoverflow.com/questions/61909261/how-can-we-detect-inconsistency-in-pandas-dataframe
              #https://www.webpages.uidaho.edu/~stevel/cheatsheets/Pandas%20DataFrame%20Notes_12pages.pdf
 
-#to_keep = df[df.groupby(['a', 'b', 'c'])['result'].transform('nunique') == 1] #duplicates
+
 
 #print(to_keep)
 
@@ -53,8 +62,5 @@ data_cleaned= data.drop_duplicates(inplace=True)
 
 #in case of any inconsistencies and/or duplicates found, produce new file with refined data to be used in the subsequent analysis;
 
-#duplicate_rows = df[df.duplicated()]
-#print(duplicate_rows)
-#df.drop_duplicates(inplace=True)
 
 #print(sys.argv) # this step must be automated to the point when it can be run with a single shell command to call an executable Python script specifying necessary argument(s);
