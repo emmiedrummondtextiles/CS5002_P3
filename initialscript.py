@@ -1,6 +1,7 @@
 
 import pandas as pd
 import numpy as np
+import matplotlib
 print("Hello World!")
 
 #https://blog.devgenius.io/5-essential-data-quality-checks-you-can-perform-with-python-18fc87655950
