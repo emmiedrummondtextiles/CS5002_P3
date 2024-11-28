@@ -3,8 +3,9 @@ import csv
 import json
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt 
 from pandas import DataFrame, Series 
+
+#doing data visualisation in seperate .py file, this is datat cleaning file
 
 print("Hello World!")
 
@@ -25,32 +26,44 @@ def check_data_types(df, expected_types):
         except ValueError as error:
             print(f"Error converting column to expected tyoe")
             return df
+        
+        #https://realpython.com/python-data-cleaning-numpy-pandas/
+        #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
+        # checked the data types based off of these tutorials, by column for each population segment
 
-#
-# 
-# df_duplicates= df.drop_duplicates(inplace=True) 
+#check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
+
+def range_or_list():
+    return
+
+#https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
+#https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
 
 
-#with open(r"data\data_dictionary.json", "r") as jsonfile: #forgot r
-    #data_dictionary = json.load(jsonfile)
+#handling duplicates
+
+def duplicate_check(df):
+    duplicate_rows= df[df.duplicated()]
+    if not duplicate_rows.empty:
+        df.drop_duplicates()
+        return df, duplicate_rows
+
+    #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.duplicated.html
+    #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
+
+
+#print cleaned file, to convert back into a csv
+#df.to_csv(output_file, index=False)
+    #print(f"Cleaned data saved to '{output_file}'.")
+
 
 #https://www.webpages.uidaho.edu/~stevel/cheatsheets/Pandas%20DataFrame%20Notes_12pages.pdf
 
-#print("Missing values:\n", data.isnull().sum())
 
-#to_keep = df[df.groupby(['a', 'b', 'c'])['result'].transform('nunique') == 1] #duplicates
-#duplicate_rows = df[df.duplicated()]
-#print(duplicate_rows)
-#df.drop_duplicates(inplace=True)
 
 #https://www.w3schools.com/python/pandas/pandas_cleaning.asp
 
 
-#associate directly to data dictionary?, 
-
-#assert data_cleaned["Age"].between(0,120).all(),"out of range" #object is not scriptable, Age
-
-#for columns in  df:  #convert csv to string? 
 
 
 
@@ -68,4 +81,6 @@ def check_data_types(df, expected_types):
 
 #print(to_keep)
 
-#print(sys.argv) # this step must be automated to the point when it can be run with a single shell command to call an executable Python script specifying necessary argument(s);
+#print(sys.argv)
+# 
+#  # this step must be automated to the point when it can be run with a single shell command to call an executable Python script specifying necessary argument(s);
