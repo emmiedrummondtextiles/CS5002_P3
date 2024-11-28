@@ -8,34 +8,35 @@ from pandas import DataFrame, Series
 
 print("Hello World!")
 
-#four loop on pandas mapping
-#pin thing in sys 
-
-#https://blog.devgenius.io/5-essential-data-quality-checks-you-can-perform-with-python-18fc87655950
-#https://medium.com/@swaratvaghela30112003/working-with-csv-and-json-in-python-fc88e49c1c1d
-
-#read cvs file
-# use data_dictionary as 
-
 #first step:  the values of variables are of the expected format (numbers, strings, etc.)
 # the values of variables are admissible (e.g. are within a given range or are from the list of admissible values)
 #in case of any inconsistencies and/or duplicates found, produce new file with refined data to be used in the subsequent analysis;
 
+def load_df(file_path):
+    return pd.read_csv("data/Scotland_teaching_file_1PCT.csv")  
 
-#df = pd.read_csv('data\Scotland_teaching_file_1PCT.csv')
+#check data types before duplicates
 
-df = pd.read_csv("data/Scotland_teaching_file_1PCT.csv") #making json and csv different 
-print(df.dtypes)
+def check_data_types(df, expected_types):
+    for column, expected_type in expected_types.items():
+        try:
+            df[column] = df[column].astype(expected_type)
+            print(f"Column '{column} converted to {expected_type}.")
+        except ValueError as error:
+            print(f"Error converting column to expected tyoe")
+            return df
 
-df_cleaned= df.drop_duplicates(inplace=True) 
+#
+# 
+# df_duplicates= df.drop_duplicates(inplace=True) 
 
 
-with open(r"data\data_dictionary.json", "r") as jsonfile: #forgot r
-    data_dictionary = json.load(jsonfile)
+#with open(r"data\data_dictionary.json", "r") as jsonfile: #forgot r
+    #data_dictionary = json.load(jsonfile)
 
-#df = pd.DataFrame(np.array(data_dictionary)),
+#https://www.webpages.uidaho.edu/~stevel/cheatsheets/Pandas%20DataFrame%20Notes_12pages.pdf
 
-print("Missing values:\n", data.isnull().sum())
+#print("Missing values:\n", data.isnull().sum())
 
 #to_keep = df[df.groupby(['a', 'b', 'c'])['result'].transform('nunique') == 1] #duplicates
 #duplicate_rows = df[df.duplicated()]
@@ -47,7 +48,7 @@ print("Missing values:\n", data.isnull().sum())
 
 #associate directly to data dictionary?, 
 
-assert data_cleaned["Age"].between(0,120).all(),"out of range" #object is not scriptable, Age
+#assert data_cleaned["Age"].between(0,120).all(),"out of range" #object is not scriptable, Age
 
 #for columns in  df:  #convert csv to string? 
 
