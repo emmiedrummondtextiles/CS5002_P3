@@ -21,17 +21,25 @@ def load_data_dictionary():
         data_dictionary = json.load(jsonfile)
     return data_dictionary
 
+data_dictionary = load_data_dictionary
+
 #https://stackoverflow.com/questions/20199126/reading-json-from-a-file
 
+def get_expected_types_from_data_dictionary(data_dict):
+    expected_types = {} #make a dictionary with keys 
+    for key in data_dict_keys.():
+        if isinstance (data_dict[key], dict):
+            expected_types[key] = 'int' if list(data_dict[key].keys())[0].isdigit() else 'string'
+            return expected_types
+            
+            #expect an integer
 
-#def load_data_dictionary(json_path):
-    #with open(json_path, 'r') as file:
-     #   data_dictionary = json.load(file)
-   # return data_dictionary
+    #https://stackoverflow.com/questions/3294889/iterating-over-dictionaries-using-for-loops
+    #https://docs.python.org/3/tutorial/datastructures.html#dictionaries
 
 #check data types before duplicates
 
-def check_data_types(df, expected_types):
+def check_data_types(df, expected_types): # figure out if you still need this
     for column, expected_type in expected_types.items():
         try:
             df[column] = df[column].astype(expected_type)
