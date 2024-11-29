@@ -9,31 +9,27 @@ from pandas import DataFrame, Series
 
 print("Hello World!")
 
-def load_df(file_path):
-    return pd.read_csv("data/Scotland_teaching_file_1PCT.csv")  
+def load_df():
+    return pd.read_csv("data/Scotland_teaching_file_1PCT.csv") 
 
 ##missing_values = ["n/a", "na", "--"]
 #df = pd.read_csv("property data.csv", na_values = missing_values) put this up here?
 
 #loading instead like at the start
 def load_data_dictionary():
-    with open(r"data\data-dictionary.json", "r") as jsonfile:
+    with open(r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\data_dictionary.json", "r") as jsonfile:
         data_dictionary = json.load(jsonfile)
     return data_dictionary
 
-data_dictionary = load_data_dictionary
+
+data_dictionary = load_data_dictionary()
 
 #https://stackoverflow.com/questions/20199126/reading-json-from-a-file
 
-def get_expected_types_from_data_dictionary(data_dict):
+def get_expected_types_from_data_dictionary(df): #refer to df instead
     df = df.infer_objects()
     return df.dtypes.to_dict() # found inbuilt to automatically concert data types #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
 
-
-            #expect an integer
-
-    #https://stackoverflow.com/questions/3294889/iterating-over-dictionaries-using-for-loops
-    #https://docs.python.org/3/tutorial/datastructures.html#dictionaries
     #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
 
 #check data types before duplicates
@@ -54,21 +50,21 @@ def check_data_types(df, expected_types): # figure out if you still need this
 #do we want to print or append?
 #check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
 
-def range_or_list(df, range_or_list_values):
-    for column, admissable in range_or_list_values.items():
-        try:
-           if isinstance(admissable):
-               min_val, max_val = admissable
-               df[column]=df[column].apply(lambda row: min_val<= row <= max_val) 
-               print(f"Column  {column} values to be checked within range")
+#def range_or_list(df, range_or_list_values):
+   # for column, admissable in range_or_list_values.items():
+      #  try:
+        #   if isinstance(admissable):
+          #     min_val, max_val = admissable
+          #     df[column]=df[column].apply(lambda row: min_val<= row <= max_val) 
+           #    print(f"Column  {column} values to be checked within range")
 
-           elif isinstance(admissable, list):   #put list aswell as range
+         #  elif isinstance(admissable, list):   #put list aswell as range
 
-            df[column]=df[column].apply()
+         #   df[column]=df[column].apply()
 
-        except ValueError as error:
-            print(f"error checking columns for admissable values") #do list as a value error?
-            return df
+     #   except ValueError as error:
+      #     print(f"error checking columns for admissable values") #do list as a value error?
+       #    return df
 
 #https://www.geeksforgeeks.org/applying-lambda-functions-to-pandas-dataframe/
 #https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
@@ -89,7 +85,7 @@ def duplicate_check(df):
     #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
 
 
-def missing_value_check(df):
+def missing_value_check(df): # error, load_Df
     df.replace('', np.nan) #from #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
     nan_values = df[df.isna().any(axis=1)]
     missing_summary = df.isna().sum()
@@ -103,9 +99,29 @@ def missing_value_check(df):
 #https://stackoverflow.com/questions/27159189/find-empty-or-nan-entry-in-pandas-dataframe
 
 
+#call everything into one funciton to convert, I will do admissable later as Im stuck
 
 def clean_data(file_path, output_file):
-    df = load_df
+    df = load_df()
+    df, columns_with_missing, nan_values = missing_value_check(df)
+    expected_types = get_expected_types_from_data_dictionary(df)
+    df = check_data_types(df, expected_types)
+    df, duplicate_rows = duplicate_check(df)
+
+    return {
+        "corrected_columns": expected_types.keys(),
+        "duplicate_rows": duplicate_rows,
+        "columns_with_missing": columns_with_missing,
+        "nan_values": nan_values,
+        "output_file": output_file
+    }
+
+if __name__ == "__main__":
+    input_file = 'data/Scotland_teaching_file_1PCT.csv'
+    output_file = 'data/Scotland_teaching_file_1PCT_cleaned.csv'
+    result_summary = clean_data(input_file, output_file)
+    print(result_summary)
+
 
 
 #print cleaned file, to convert back into a csv
