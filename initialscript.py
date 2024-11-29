@@ -75,11 +75,12 @@ def check_data_types(df, expected_types): # figure out if you still need this
 
 #handling duplicates
 
+
 def duplicate_check(df):
-    duplicate_rows= df[df.duplicated()]
-    if not duplicate_rows.empty:
-        df.drop_duplicates()
-        return df, duplicate_rows
+    duplicate_rows = df[df.duplicated()]
+    df = df.drop_duplicates()
+    print(f"Removed {len(duplicate_rows)} duplicate rows.")
+    return df, duplicate_rows
 
     #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.duplicated.html
     #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
@@ -93,7 +94,7 @@ def missing_value_check(df): # error, load_Df
     for column, missing_count in missing_summary.items():
         if missing_count  > 0: 
             columns_with_missing_value.append((column, missing_count))
-        return df, columns_with_missing_value, nan_values
+    return df, columns_with_missing_value, nan_values
     
 #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
 #https://stackoverflow.com/questions/27159189/find-empty-or-nan-entry-in-pandas-dataframe
