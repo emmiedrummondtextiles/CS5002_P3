@@ -34,6 +34,16 @@ def check_data_types(df, expected_types):
 #check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
 
 def range_or_list():
+
+#myfun = lambda row: row['b']<=row['a']<=row['c'], between max val and minimum val
+
+df = [df[column]}.apply(lambda row: min_val<= row[] max_val)
+    
+
+
+#df1['Result'] = df1.apply(myfun, axis=1)
+#display(df1)
+    #elifisinstance
     return
 
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
