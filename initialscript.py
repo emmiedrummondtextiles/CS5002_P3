@@ -39,11 +39,18 @@ def range_or_list(df, range_or_list_values):
         try:
            if isinstance(admissable):
                min_val, max_val = admissable
-               df[column]=df[column].apply(lambda row: min_val<= row[] max_val) #error
-               print(f"Column values to be checked within range")
-           elif isinstance(admissable,):
-                   return df
+               df[column]=df[column].apply(lambda row: min_val<= row <= max_val) 
+               print(f"Column  {column} values to be checked within range")
 
+           elif isinstance(admissable, list):   #put list aswell as range
+
+            df[column]=df[column].apply()
+
+        except ValueError as error:
+            print(f"error checking columns for admissable values") #do list as a value error?
+            return df
+
+#https://www.geeksforgeeks.org/applying-lambda-functions-to-pandas-dataframe/
 
 #myfun = lambda row: row['b']<=row['a']<=row['c'], between max val and minimum val
 
@@ -52,13 +59,8 @@ def range_or_list(df, range_or_list_values):
 #df1['Result'] = df1.apply(myfun, axis=1)
 #display(df1)
 
-
-
-
-
     #elifisinstance
 #https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
-
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
 #https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
 #https://stackoverflow.com/questions/13921707/check-if-numbers-are-in-a-certain-range-in-python-with-a-loop
