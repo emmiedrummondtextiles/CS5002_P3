@@ -26,16 +26,15 @@ data_dictionary = load_data_dictionary
 #https://stackoverflow.com/questions/20199126/reading-json-from-a-file
 
 def get_expected_types_from_data_dictionary(data_dict):
-    expected_types = {} #make a dictionary with keys 
-    for key in data_dict_keys.():
-        if isinstance (data_dict[key], dict):
-            expected_types[key] = 'int' if list(data_dict[key].keys())[0].isdigit() else 'string'
-            return expected_types
-            
+    df = df.infer_objects()
+    return df.dtypes.to_dict() # found inbuilt to automatically concert data types #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
+
+
             #expect an integer
 
     #https://stackoverflow.com/questions/3294889/iterating-over-dictionaries-using-for-loops
     #https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+    #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
 
 #check data types before duplicates
 
@@ -45,7 +44,7 @@ def check_data_types(df, expected_types): # figure out if you still need this
             df[column] = df[column].astype(expected_type)
             print(f"Column '{column} converted to {expected_type}.") #check if need to define integer and list, before or after?
         except ValueError as error:
-            print(f"Error converting column to expected tyoe")
+            print(f"Error converting column to expected type")
             return df
         
         #https://realpython.com/python-data-cleaning-numpy-pandas/
@@ -104,6 +103,9 @@ def missing_value_check(df):
 #https://stackoverflow.com/questions/27159189/find-empty-or-nan-entry-in-pandas-dataframe
 
 
+
+def clean_data(file_path, output_file):
+    df = load_df
 
 
 #print cleaned file, to convert back into a csv
