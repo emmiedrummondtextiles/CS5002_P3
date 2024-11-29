@@ -51,15 +51,6 @@ def range_or_list(df, range_or_list_values):
             return df
 
 #https://www.geeksforgeeks.org/applying-lambda-functions-to-pandas-dataframe/
-
-#myfun = lambda row: row['b']<=row['a']<=row['c'], between max val and minimum val
-
-    #df = df[column].apply(lambda row: min_val<= row[] max_val) #axis? 
-    
-#df1['Result'] = df1.apply(myfun, axis=1)
-#display(df1)
-
-    #elifisinstance
 #https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
 #https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
@@ -76,6 +67,23 @@ def duplicate_check(df):
 
     #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.duplicated.html
     #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
+
+
+#detect missing values 
+
+# Making a list of missing value types
+#missing_values = ["n/a", "na", "--"]
+#df = pd.read_csv("property data.csv", na_values = missing_values)
+
+#df = df.replace(' ', np.nan)                   # to get rid of empty values
+#nan_values = df[df.isna().any(axis=1)]         # to get all rows with Na
+
+#nan_values  
+
+#https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
+#https://stackoverflow.com/questions/27159189/find-empty-or-nan-entry-in-pandas-dataframe
+
+
 
 
 #print cleaned file, to convert back into a csv
