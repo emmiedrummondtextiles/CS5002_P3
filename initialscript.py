@@ -38,7 +38,8 @@ def range_or_list():
 
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
 #https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
-
+#https://stackoverflow.com/questions/13921707/check-if-numbers-are-in-a-certain-range-in-python-with-a-loop
+#https://www.w3resource.com/python-exercises/python-functions-exercise-6.php
 
 #handling duplicates
 
