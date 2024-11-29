@@ -9,10 +9,6 @@ from pandas import DataFrame, Series
 
 print("Hello World!")
 
-#first step:  the values of variables are of the expected format (numbers, strings, etc.)
-# the values of variables are admissible (e.g. are within a given range or are from the list of admissible values)
-#in case of any inconsistencies and/or duplicates found, produce new file with refined data to be used in the subsequent analysis;
-
 def load_df(file_path):
     return pd.read_csv("data/Scotland_teaching_file_1PCT.csv")  
 
@@ -22,7 +18,7 @@ def check_data_types(df, expected_types):
     for column, expected_type in expected_types.items():
         try:
             df[column] = df[column].astype(expected_type)
-            print(f"Column '{column} converted to {expected_type}.")
+            print(f"Column '{column} converted to {expected_type}.") #checkif need to define integer and list
         except ValueError as error:
             print(f"Error converting column to expected tyoe")
             return df
@@ -68,6 +64,16 @@ def duplicate_check(df):
     #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.duplicated.html
     #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
 
+
+def missing_value_check(df):
+    df.replace('', np.nan) #from #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
+    nan_values = df[df.isna().any(axis=1)]
+    missing_summary = df.isna().sum()
+    columns_with_missing_value = []
+    for column, missing_count in missing_summary.items():
+        if missing_count  > 0: 
+            columns_with_missing_value.append((column, missing_count))
+        return df, columns_with_missing_value, nan_values
 
 #detect missing values 
 
