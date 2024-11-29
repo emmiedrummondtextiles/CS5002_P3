@@ -31,20 +31,29 @@ def check_data_types(df, expected_types):
         #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
         # checked the data types based off of these tutorials, by column for each population segment
 
+#do we want to print or append?
 #check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
 
-def range_or_list():
-
+def range_or_list(df, range_or_list_values):
+    for column, admissable in range_or_list_values.items():
+        try:
+           if isinstance(admissable):
+               min_val, max_val = admissable
 #myfun = lambda row: row['b']<=row['a']<=row['c'], between max val and minimum val
 
-df = [df[column]}.apply(lambda row: min_val<= row[] max_val)
+    df = df[df[column]}.apply(lambda row: min_val<= row[] max_val) #axis? 
     
-
-
 #df1['Result'] = df1.apply(myfun, axis=1)
 #display(df1)
+
+
+    #elif isinstance(admissable,)
+
+
     #elifisinstance
-    return
+    return df
+
+#https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
 
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
 #https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
