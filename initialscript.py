@@ -39,20 +39,24 @@ def range_or_list(df, range_or_list_values):
         try:
            if isinstance(admissable):
                min_val, max_val = admissable
+               df[column]=df[column].apply(lambda row: min_val<= row[] max_val) #error
+               print(f"Column values to be checked within range")
+           elif isinstance(admissable,):
+                   return df
+
+
 #myfun = lambda row: row['b']<=row['a']<=row['c'], between max val and minimum val
 
-    df = df[df[column]}.apply(lambda row: min_val<= row[] max_val) #axis? 
+    #df = df[column].apply(lambda row: min_val<= row[] max_val) #axis? 
     
 #df1['Result'] = df1.apply(myfun, axis=1)
 #display(df1)
 
 
-    #elif isinstance(admissable,)
+
 
 
     #elifisinstance
-    return df
-
 #https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
 
 #https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
