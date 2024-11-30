@@ -34,18 +34,18 @@ def duplicate_admissable__missing_check(df, data_dict):
 
 #find a simpler, or inbuild way to do this, not runnning; use nan?
 
-    for column, admissable in data_dict.items(): #changes range_or_list to just refer to data_dict, to directly load what is admissable
+   for column, admissable in data_dict.items(): # Changes range_or_list to just refer to data_dict, to directly load what is admissible
         if column in df.columns:
             try:
-                if isinstance(admissable):
+                if isinstance(admissable, tuple):
                     min_val, max_val = admissable
-                df[column]=df[column].apply(lambda row: min_val<= row <= max_val)
-                print(f"Column  {column} values to be checked within range") #remove admissable aswell as duplicates?, find source
-                elif isinstance(admissable, list):   #put list aswell as range
-                df[column]=df[column].apply()
-                except ValueError as error:
-            print(f"error checking columns for admissable values") #do list as a value error?
-
+                    df[column] = df[column].between(min_val, max_val, inclusive='both').replace({False: np.nan}) #https://stackoverflow.com/questions/29247712/how-to-replace-a-value-in-pandas-with-nan
+                    print(f"Column '{column}' values checked within range ({min_val}, {max_val})")
+                elif isinstance(admissable, list):
+                    df[column] = df[column].where(df[column].isin(admissable), np.nan)
+                    print(f"Column '{column}' values checked against admissible list.")
+            except ValueError as error:
+                print(f"Error checking columns for admissible values: {error}")
 #missing values, replace with nan
 
     df.replace('', np.nan) #from #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
