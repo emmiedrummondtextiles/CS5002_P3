@@ -9,6 +9,7 @@ df = pd.read_csv(csv_path)
 
 
 
+
 # perform the descriptive analysis of the dataset:– determine the total number of records in the dataset;– determine the type of each variable in the dataset;– for each variable except “Record_Number” and “Region”, find all different values that
  #it takes, and the number of occurrences for each value,
 

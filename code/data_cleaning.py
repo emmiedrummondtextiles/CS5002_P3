@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from pandas import DataFrame, Series 
 
+#pandas merge funciton, use loops 
+
 #doing data visualisation in seperate .py file, this is datat cleaning file, 
 
 #data frame is becoming none?, think it is reading data_dictionary, or there is somereason why it isnt loading, im not going to load externally until i understand why
@@ -13,12 +15,17 @@ print("Hello World!")
 
 #putting this in one function to call later on, instead of calling files at the start which was causing issues/ regognising file as empty
 
+
+#new line is new person or data set, 15 ints then return, 
+
 def load_data(csv_path, json_path):
     df = pd.read_csv(csv_path)
     with open(json_path, 'r') as file:
         data_dict = json.load(file)
     df = df.infer_objects()
-    return df, data_dict #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/ 
+    return df, data_dict 
+
+#https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/ 
 #infer objects already checks data types so data_types_check is not neccesary, i will use that to load the json types
 
 #https://stackoverflow.com/questions/20199126/reading-json-from-a-file
@@ -42,6 +49,8 @@ def duplicate_admissable__missing_check(df, data_dict):
                     print(f"Column '{column}' values checked against admissible list.")
             except ValueError as error:
                 print(f"Error checking columns for admissible values: {error}")
+
+                # no admissable returns are being returned in terminal, redo
                 
 #missing values, replace with nan
 
@@ -52,6 +61,8 @@ def duplicate_admissable__missing_check(df, data_dict):
     for column, missing_count in missing_summary.items():
         if missing_count  > 0: 
             columns_with_missing_value.append((column, missing_count))
+
+            #print missing value return in terminal
 
     return df
 
@@ -68,27 +79,21 @@ def duplicate_admissable__missing_check(df, data_dict):
 
  #save the refined data to then check data types after the duplicates, admissable and missing values have been dealt with 
 
-
-#check  the expected types from the json before checking data types in the csvs
-
-def check_data_types(df):
-    data_types = df.dtypes
-    print("Data types of each variable:")
-    print(data_types)
-    return df
-
-#using infer.objects inbuild instead, more automated as said in brief
-
         #https://realpython.com/python-data-cleaning-numpy-pandas/
         #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
 
 # took away lambda as it wasnt running/ used nan instead, realised i havent mapped all the values in the json, just the code and basic description, must go back and redo json file
+#i originally put that the output csv should be with decriptions rather than numberical, i changed this to then transform it in the bar graph mapping
+
+
 def mapping_values(df, data_dict):
     for column, mapping in data_dict.items():
         if column in df.columns:
-            df[column] = df[column].map(mapping).fillna(np.nan)
+            valid_values = list(mapping.keys())
+            df[column] = df[column].where(df[column].isin(valid_values), np.nan)
             print(f"Validated values in column '{column}'.")
     return df
+
 
 #https://datagy.io/pandas-map-apply/
 #https://www.geeksforgeeks.org/using-dictionary-to-remap-values-in-pandas-dataframe-columns
@@ -100,12 +105,10 @@ def clean_data(): #instead of calling I  will fulfil the paths here, made it sim
     json_path = "data/data_dictionary.json"
     output_path = "data/refined_Scotland_teaching_file_1PCT.csv"
 
-#replace data_dictionary with json path for printing
-    print(f"Total number of records: {len(df)}")
+#replace data_dictionary with json path for printing , removed the check as it was regognising it as an unbound local error
     df, data_dict = load_data(csv_path, json_path)
     df = duplicate_admissable__missing_check(df, data_dict)
     df = mapping_values(df, data_dict)
-    df = check_data_types(df)
 
 
     df.to_csv(output_path, index=False)
