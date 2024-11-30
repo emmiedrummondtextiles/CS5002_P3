@@ -19,6 +19,7 @@ def load_data(csv_path, json_path):
         data_dict = json.load(file)
     df = df.infer_objects()
     return df, data_dict #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/ 
+#infer objects already checks data types so data_types_check is not neccesary, i will use that to load the json types
 
 #https://stackoverflow.com/questions/20199126/reading-json-from-a-file
 #https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
@@ -31,6 +32,7 @@ def duplicate_admissable__missing_check(df, data_dict):
 
 #check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
 
+#find a simpler, or inbuild way to do this, not runnning; use nan?
 
     for column, admissable in data_dict.items(): #changes range_or_list to just refer to data_dict, to directly load what is admissable
         if column in df.columns:
@@ -70,66 +72,52 @@ def duplicate_admissable__missing_check(df, data_dict):
  #save the refined data to then check data types after the duplicates, admissable and missing values have been dealt with 
 
 
+#check  the expected types from the json before checking data types in the csvs
 
-#check  the expected types from the json before checking data types in the csv?
+def check_data_types(df):
+    data_types = df.dtypes
+    print("Data types of each variable:")
+    print(data_types)
+    return df
 
+#using infer.objects inbuild instead, more automated as said in brief
 
-
-
-
-def check_data_types(df, expected_types): # figure out if you still need this
-    for column, expected_type in expected_types.items():
-        try:
-            df[column] = df[column].astype(expected_type)
-            print(f"Column '{column} converted to {expected_type}.") #check if need to define integer and list, before or after?
-        except ValueError as error:
-            print(f"Error converting column to expected type")
-        return df
-        
         #https://realpython.com/python-data-cleaning-numpy-pandas/
         #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
 
-#mapping values using loop, come first or after data cleaning?
-
+# took away lambda as it wasnt running/ used nan instead
 def mapping_values(df, data_dict):
     for column, mapping in data_dict.items():
         if column in df.columns:
-            valid_values = list(mapping.keys())
-            df[column] = df[column].apply(lambda x: x if str(x) in valid_values else np.nan) #https://stackoverflow.com/questions/44061607/pandas-lambda-function-with-nan-support
+            df[column] = df[column].map(mapping).fillna(np.nan)
             print(f"Validated values in column '{column}'.")
-    return df #put this in duplicates?
+    return df
 
 #https://datagy.io/pandas-map-apply/
 #https://www.geeksforgeeks.org/using-dictionary-to-remap-values-in-pandas-dataframe-columns
 
 #call everything into one funciton to convert, I will do admissable later as Im stuck
 
-def clean_data(): #instead of calling I  will fulfil the paths here
+def clean_data(): #instead of calling I  will fulfil the paths here, made it simpler by handling fewer functions
     csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\Scotland_teaching_file_1PCT.csv"
     json_path = "data/data_dictionary.json"
     output_path = "data/refined_Scotland_teaching_file_1PCT.csv"
 
 #replace data_dictionary with json path for printing
 
+    df, data_dict = load_data(csv_path, json_path)
+    df = duplicate_admissable__missing_check(df, data_dict)
+    df = mapping_values(df, data_dict)
+    df = check_data_types(df)
 
-    df = df
-    df = mapping_values(df, data_dictionary)
-    df, columns_with_missing_value, nan_values = missing_value_check(df)
-    expected_types = get_expected_types_from_data_dictionary(df) #define this
-    df = check_data_types(df, expected_types)
-    df, duplicate_rows = duplicate_check(df)
-    return {
-        "corrected_columns": expected_types.keys(),
-        "duplicate_rows": duplicate_rows,
-        "columns_with_missing": columns_with_missing_value,
-        "nan_values": nan_values,
-        "output_file": output_file
-    }
+
+    df.to_csv(output_path, index=False)
+    print(f"Cleaned data saved to '{output_path}'.")
+
+
 if __name__ == "__main__":
-    input_file = 'data/Scotland_teaching_file_1PCT.csv'
-    output_file = 'data/Scotland_teaching_file_1PCT_cleaned.csv'
-    result_summary = clean_data(input_file, output_file)
-    print(result_summary)
+    clean_data()
+
 
 
 #print cleaned file, to convert back into a csv, debating on using sys but will see
