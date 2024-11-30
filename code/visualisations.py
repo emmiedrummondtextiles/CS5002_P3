@@ -1,17 +1,37 @@
-#matplot lib visulisaitons
-
 import pandas as pd
+import numpy as np
+import csv
+from pandas import Series, DataFrame
 import matplotlib.pylot as plt
-
-csv_path = "data/refined_Scotland_teaching_file_1PCT.csv"
-df = pd.read_csv(csv_path)
+import descriptive_analysis from data_cleaning
 
 
 
+data= cvs.reader(cvsfile, delimiter=)
+
+#x = [] 
+#y = [] 
 
 
-# perform the descriptive analysis of the dataset:– determine the total number of records in the dataset;– determine the type of each variable in the dataset;– for each variable except “Record_Number” and “Region”, find all different values that
- #it takes, and the number of occurrences for each value,
+
+# Read the data 
+#with open('data/refined_Scotland_teaching_file_1PCT.csv', 'r') as csvfile: 
+   #plots = csv.reader(csvfile, delimiter = ',') 
+      
+   # for row in plots: 
+      #  x.append(row[0]) 
+       # y.append(int(row[2])) 
+  
+#plt.bar(x, y, color = 'g', width = 0.72, label = "Age") 
+#plt.xlabel('Names') 
+#plt.ylabel('Ages') 
+#plt.title('Ages of different persons') 
+#plt.legend() 
+#plt.show() 
 
 
-#build the following plots:– bar chart for the number of records for each age group;– bar chart for the number of records for each occupation,
+#https://github.com/stefmolin/Hands-On-Data-Analysis-with-Pandas/blob/master/ch_05/1-introducing_matplotlib.ipynb
+#https://www.geeksforgeeks.org/how-to-plot-bar-graph-in-python-using-csv-file/
+#https://pythonbasics.org/matplotlib-bar-chart/
+
+#bar chart for the number of records for each occupation,

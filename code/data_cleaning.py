@@ -5,118 +5,127 @@ import pandas as pd
 import numpy as np
 from pandas import DataFrame, Series 
 
-#pandas merge funciton, use loops 
+print("Hello World!") 
 
-#doing data visualisation in seperate .py file, this is datat cleaning file, 
-
-#data frame is becoming none?, think it is reading data_dictionary, or there is somereason why it isnt loading, im not going to load externally until i understand why
-
-print("Hello World!")
-
-#putting this in one function to call later on, instead of calling files at the start which was causing issues/ regognising file as empty
-
-
-#new line is new person or data set, 15 ints then return, 
+#json file = data_dict
+#
 
 def load_data(csv_path, json_path):
-    df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path) #creating the initial dataframe
     with open(json_path, 'r') as file:
         data_dict = json.load(file)
     df = df.infer_objects()
     return df, data_dict 
 
-#https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/ 
-#infer objects already checks data types so data_types_check is not neccesary, i will use that to load the json types
 
-#https://stackoverflow.com/questions/20199126/reading-json-from-a-file
-#https://www.analyticsvidhya.com/blog/2024/05/automate-data-cleaning-in-python/
+def remove_duplicates_and_check_missing(df):
 
-#Combining duplicates, admissable and missing values into one function as I was having issues with calling them all at the end, duplicates was turning the data set into null.
+    df.replace('', np.nan, inplace=True) ##https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
+#replacing missing values with NAN
 
-def duplicate_admissable__missing_check(df, data_dict):
-    df = df.drop_duplicates() 
-    print(f"Removed {len(df)} duplicate rows.") # print so i can see if it works in terminal
-    
-    for column, admissable in data_dict.items(): # Changes range_or_list to just refer to data_dict, to directly load what is admissible
-        if column in df.columns:
-            try:
-                if isinstance(admissable, tuple):
-                    min_val, max_val = admissable
-                    df[column] = df[column].between(min_val, max_val, inclusive='both').replace({False: np.nan}) #https://stackoverflow.com/questions/29247712/how-to-replace-a-value-in-pandas-with-nan
-                    print(f"Column '{column}' values checked within range ({min_val}, {max_val})")
-                elif isinstance(admissable, list):
-                    df[column] = df[column].where(df[column].isin(admissable), np.nan)
-                    print(f"Column '{column}' values checked against admissible list.")
-            except ValueError as error:
-                print(f"Error checking columns for admissible values: {error}")
+    df = df.drop_duplicates()  #https://www.geeksforgeeks.org/python-pandas-dataframe-drop_duplicates/
+    print(f"Removed {len(df)} duplicate rows.") 
 
-                # no admissable returns are being returned in terminal, redo
-                
-#missing values, replace with nan
+#missing values
 
-    df.replace('', np.nan) #from #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
-    nan_values = df[df.isna().any(axis=1)]
-    missing_summary = df.isna().sum()
-    columns_with_missing_value = [] #null, caused issues with converting data set to none, will have to revamp
+    missing_summary = df.isna().sum()  #https://stackoverflow.com/questions/26266362/how-do-i-count-the-nan-values-in-a-column-in-pandas-dataframe
     for column, missing_count in missing_summary.items():
-        if missing_count  > 0: 
-            columns_with_missing_value.append((column, missing_count))
-
-            #print missing value return in terminal
-
+        if missing_count > 0:
+            print(f"Column '{column}' has {missing_count} missing values.")
+    
     return df
 
-#https://www.geeksforgeeks.org/applying-lambda-functions-to-pandas-dataframe/
-#https://www.slingacademy.com/article/exploring-pandas-dataframe-isin-method/
-#https://blog.finxter.com/5-best-ways-to-check-if-values-fall-within-intervals-using-pythons-pandas/
-#https://stackoverflow.com/questions/40156469/how-to-check-if-any-value-of-a-column-is-in-a-range-in-between-two-values-in-p
-#https://stackoverflow.com/questions/13921707/check-if-numbers-are-in-a-certain-range-in-python-with-a-loop
-#https://www.w3resource.com/python-exercises/python-functions-exercise-6.php
-#https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.duplicated.html
- #https://stackoverflow.com/questions/14657241/how-do-i-get-a-list-of-all-the-duplicate-items-using-pandas-in-python
- #https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
-#https://stackoverflow.com/questions/27159189/find-empty-or-nan-entry-in-pandas-dataframe
 
- #save the refined data to then check data types after the duplicates, admissable and missing values have been dealt with 
+#must check if  the values of variables are of the expected format (numbers, strings, etc.);, check if infer.objects does this properly, need print statement
+#infer doesnt check if the values coallign with the json dictionary, edit admissable to directly corralate this
 
-        #https://realpython.com/python-data-cleaning-numpy-pandas/
-        #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
+#pandas merge funciton, use loops, create data frame with merge funciton, 
+#https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html
 
-# took away lambda as it wasnt running/ used nan instead, realised i havent mapped all the values in the json, just the code and basic description, must go back and redo json file
-#i originally put that the output csv should be with decriptions rather than numberical, i changed this to then transform it in the bar graph mapping
+#I forgot to directly link the data_dictionary and the csv file together, merging them would be the best approach as i researched previously
+
+#putting mapping and invalid types in the same funciton.
 
 
-def mapping_values(df, data_dict):
-    for column, mapping in data_dict.items():
-        if column in df.columns:
-            valid_values = list(mapping.keys())
-            df[column] = df[column].where(df[column].isin(valid_values), np.nan)
-            print(f"Validated values in column '{column}'.")
-    return df
+def admissable_invalid_merge(df, data_dict):
+     value_nan = [] #finding the number of invalid entries, that were replaced by nan.
 
+     for column, admissable in data_dict.items():
+        if column in df.columns: #loop over data_dict (mappings to the json file)
+        
+            admissable_df = pd.DataFrame({column: list(admissable.keys())})  #list of valid keys from the cvs file, new data_frame
+
+#https://stackoverflow.com/questions/23940181/pandas-merging-with-missing-values
+#https://stackoverflow.com/questions/46386402/how-to-properly-understand-pandas-dataframe-merge-how-left-on-right-on
+
+            merged_df = df[[column]].merge(admissable_df, on=column, how='left', indicator=True) #merging to find invalid values
+            invalid_rows = merged_df[merged_df['_merge'] == 'left_only'].index
+
+#https://dnmtechs.com/replacing-invalid-values-with-none-in-pandas-dataframe-in-python-3/
+            
+            if len(invalid_rows) > 0: #relacing the invalid rows with nan
+                df.loc[invalid_rows, column] = np.nan
+                value_nan.append(f"Column '{column}' has {len(invalid_rows)} invalid entries replaced with NAN")
+
+                #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html
+
+            for issue in value_nan:
+                print(issue) 
+
+            return df
+        
+#took out keys, mapping the numbers to labels
 
 #https://datagy.io/pandas-map-apply/
 #https://www.geeksforgeeks.org/using-dictionary-to-remap-values-in-pandas-dataframe-columns
 
 #call everything into one funciton to convert, I will do admissable later as Im stuck
 
-def clean_data(): #instead of calling I  will fulfil the paths here, made it simpler by handling fewer functions
+# perform the descriptive analysis of the dataset:– determine the total number of records in the dataset;– determine the type of each variable in the dataset;– for each variable except “Record_Number” and “Region”, find all different values that
+ #it takes, and the number of occurrences for each value,
+
+# was oriinally going to put decriptive analyis in the visualisation file, but decided to keep analysis in one file.
+
+
+
+def clean_data():
+    # Specified paths for the dataset and data dictionary
     csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\Scotland_teaching_file_1PCT.csv"
-    json_path = "data/data_dictionary.json"
-    output_path = "data/refined_Scotland_teaching_file_1PCT.csv"
+    json_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\data_dictionary.json"
+    output_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\refined_Scotland_teaching_file_1PCT.csv"
 
-#replace data_dictionary with json path for printing , removed the check as it was regognising it as an unbound local error
     df, data_dict = load_data(csv_path, json_path)
-    df = duplicate_admissable__missing_check(df, data_dict)
-    df = mapping_values(df, data_dict)
 
 
-    df.to_csv(output_path, index=False)
-    print(f"Cleaned data saved to '{output_path}'.")
+    df = admissable_invalid_merge(df, data_dict)
+    df = remove_duplicates_and_check_missing(df)
+
+    df.to_csv(output_path)
+    print(f"\nc2`leaned data saved to '{output_path}'.")
+
+
 
 
 if __name__ == "__main__":
     clean_data()
+
+#def clean_data(): #instead of calling I  will fulfil the paths here, made it simpler by handling fewer functions
+ #   csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\Scotland_teaching_file_1PCT.csv"
+  #  json_path = "data/data_dictionary.json"
+   # output_path = "data/refined_Scotland_teaching_file_1PCT.csv"
+
+#replace data_dictionary with json path for printing , removed the check as it was regognising it as an unbound local error
+    #df, data_dict = load_data(csv_path, json_path)
+    #df = duplicate_admissable__missing_check(df, data_dict)
+    #df = mapping_values(df, data_dict)
+
+
+    #df.to_csv(output_path, index=False)
+    #print(f"Cleaned data saved to '{output_path}'.")
+
+
+#if __name__ == "__main__":
+ #   clean_data()
 
 
 #print cleaned file, to convert back into a csv, debating on using sys but will see
@@ -136,21 +145,3 @@ if __name__ == "__main__":
 
 #https://www.w3schools.com/python/pandas/pandas_cleaning.asp
 
-
-
-
-
-#def columns
-
-#def rows
-
-
-#df = pd.DataFrame(np.array([[1, 2, 3, 1], [4, 5, 6, 0], [7, 8, 9, 0], [4, 5, 6, 1], [1, 2, 3, 1]]),
-                      #columns=['a', 'b', 'c', 'result'])
-             #https://stackoverflow.com/questions/61909261/how-can-we-detect-inconsistency-in-pandas-dataframe
-             #https://www.webpages.uidaho.edu/~stevel/cheatsheets/Pandas%20DataFrame%20Notes_12pages.pdf
-
-
-
-# 
-#  # this step must be automated to the point when it can be run with a single shell command to call an executable Python script specifying necessary argument(s);
