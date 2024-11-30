@@ -29,12 +29,8 @@ def load_data(csv_path, json_path):
 def duplicate_admissable__missing_check(df, data_dict):
     df = df.drop_duplicates() 
     print(f"Removed {len(df)} duplicate rows.") # print so i can see if it works in terminal
-
-#check if variables are admissable (e.g. are within a given range or are from the list of admissible values)
-
-#find a simpler, or inbuild way to do this, not runnning; use nan?
-
-   for column, admissable in data_dict.items(): # Changes range_or_list to just refer to data_dict, to directly load what is admissible
+    
+    for column, admissable in data_dict.items(): # Changes range_or_list to just refer to data_dict, to directly load what is admissible
         if column in df.columns:
             try:
                 if isinstance(admissable, tuple):
@@ -85,7 +81,7 @@ def check_data_types(df):
         #https://realpython.com/python-data-cleaning-numpy-pandas/
         #https://blog.finxter.com/5-best-ways-to-convert-data-types-in-a-pandas-dataframe-with-python/
 
-# took away lambda as it wasnt running/ used nan instead
+# took away lambda as it wasnt running/ used nan instead, realised i havent mapped all the values in the json, just the code and basic description, must go back and redo json file
 def mapping_values(df, data_dict):
     for column, mapping in data_dict.items():
         if column in df.columns:
@@ -104,7 +100,7 @@ def clean_data(): #instead of calling I  will fulfil the paths here, made it sim
     output_path = "data/refined_Scotland_teaching_file_1PCT.csv"
 
 #replace data_dictionary with json path for printing
-
+    print(f"Total number of records: {len(df)}")
     df, data_dict = load_data(csv_path, json_path)
     df = duplicate_admissable__missing_check(df, data_dict)
     df = mapping_values(df, data_dict)
@@ -117,7 +113,6 @@ def clean_data(): #instead of calling I  will fulfil the paths here, made it sim
 
 if __name__ == "__main__":
     clean_data()
-
 
 
 #print cleaned file, to convert back into a csv, debating on using sys but will see
