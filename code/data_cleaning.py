@@ -7,53 +7,41 @@ from pandas import DataFrame, Series
 
 print("Hello World!") 
 
-#json file = data_dict
-#
+#i made everything too complicatd so went back through with https://www.datacamp.com/tutorial/pandas
 
 def load_data(csv_path, json_path):
     df = pd.read_csv(csv_path) #creating the initial dataframe
     with open(json_path, 'r') as file:
         data_dict = json.load(file)
-    df = df.infer_objects()
+    df = df.infer_objects() #https://www.bing.com/search?pglt=41&q=df+%3D+df.infer_objects()+return+df%2C+data_dict&cvid=f0ae93bd141641119655d93bd9212af3&gs_lcrp=EgRlZGdlKgYIABBFGDkyBggAEEUYOTIICAEQ6QcY_FXSAQcxNzJqMGoxqAIAsAIA&FORM=ANNAB1&PC=U531
     return df, data_dict 
 
 
 def remove_duplicates_and_check_missing(df):
-
     df.replace('', np.nan, inplace=True) ##https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
-#replacing missing values with NAN
-
     df = df.drop_duplicates()  #https://www.geeksforgeeks.org/python-pandas-dataframe-drop_duplicates/
-    print(f"Removed {len(df)} duplicate rows.") 
-
-#missing values
-
+    print(f"removed {len(df)} duplicate rows") 
+    
+   # https://pandas.pydata.org/docs/user_guide/missing_data.html
+    
     missing_summary = df.isna().sum()  #https://stackoverflow.com/questions/26266362/how-do-i-count-the-nan-values-in-a-column-in-pandas-dataframe
     for column, missing_count in missing_summary.items():
         if missing_count > 0:
-            print(f"Column '{column}' has {missing_count} missing values.")
+            print(f"column '{column}' has {missing_count} missing values")
     
     return df
 
-
-#must check if  the values of variables are of the expected format (numbers, strings, etc.);, check if infer.objects does this properly, need print statement
-#infer doesnt check if the values coallign with the json dictionary, edit admissable to directly corralate this
-
 #pandas merge funciton, use loops, create data frame with merge funciton, 
+#https://pandas.pydata.org/docs/user_guide/merging.html
 #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html
 
-#I forgot to directly link the data_dictionary and the csv file together, merging them would be the best approach as i researched previously
-
-#putting mapping and invalid types in the same funciton.
-
-
 def admissable_invalid_merge(df, data_dict):
-     value_nan = [] #finding the number of invalid entries, that were replaced by nan.
+     value_nan = [] 
 
      for column, admissable in data_dict.items():
-        if column in df.columns: #loop over data_dict (mappings to the json file)
-        
-            admissable_df = pd.DataFrame({column: list(admissable.keys())})  #list of valid keys from the cvs file, new data_frame
+        if column in df.columns: #loop over data_dict 
+
+            admissable_df = pd.DataFrame({column: list(admissable.keys())})  #list of valid keys from the cvs file
 
 #https://stackoverflow.com/questions/23940181/pandas-merging-with-missing-values
 #https://stackoverflow.com/questions/46386402/how-to-properly-understand-pandas-dataframe-merge-how-left-on-right-on
@@ -63,7 +51,7 @@ def admissable_invalid_merge(df, data_dict):
 
 #https://dnmtechs.com/replacing-invalid-values-with-none-in-pandas-dataframe-in-python-3/
             
-            if len(invalid_rows) > 0: #relacing the invalid rows with nan
+            if len(invalid_rows) > 0: 
                 df.loc[invalid_rows, column] = np.nan
                 value_nan.append(f"Column '{column}' has {len(invalid_rows)} invalid entries replaced with NAN")
 
@@ -86,6 +74,20 @@ def admissable_invalid_merge(df, data_dict):
 
 # was oriinally going to put decriptive analyis in the visualisation file, but decided to keep analysis in one file.
 
+def descriptive_analysis(df):
+
+    print("\ndescriptive analysis")
+    print(f"total number of records= {len(df)}")
+
+    print("\ndata types for each variable")
+    print(df.dtypes)
+
+    # Find distinct values and their occurrence counts for each column apart from record number and region
+    for column in df.columns:
+        if column not in ["record_number", "region"]:
+            value_counts = df[column].value_counts(dropna=False) #https://stackoverflow.com/questions/68154806/count-nans-when-using-value-counts-on-a-dataframe
+            print(f"\ncolumn: {column}")
+            print(value_counts)
 
 
 def clean_data():
@@ -103,7 +105,7 @@ def clean_data():
     df.to_csv(output_path)
     print(f"\nc2`leaned data saved to '{output_path}'.")
 
-
+    descriptive_analysis(df)
 
 
 if __name__ == "__main__":
