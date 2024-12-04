@@ -26,7 +26,7 @@ if "Occupation" not in df.columns:
     print("Error: 'Occupation' column not found in CSV")
 
 if "age" in df.columns and "Occupation" in df.columns:
-    age_mapping = {int(k): v for k, v in data_dict["Age"].items()} #https://stackoverflow.com/questions/44390818/how-to-insert-key-value-pair-into-dictionary-at-a-specified-position
+    age_mapping = {int(k): v for k, v in data_dict["Age"].items()} 
     df["Age_Group"] = df["age"].map(age_mapping)  # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.map.html
     df["Occupation_Group"] = df["Occupation"].map(data_dict["Occupation"])
     
@@ -47,7 +47,7 @@ if "age" in df.columns and "Occupation" in df.columns:
 else:
     print("Error: 'Age' or 'Occupation' column not found in the dataset.")
 
-    #ethnicity was not working because i didnt put it in the data_dict
+    #ethnicity was not working because i didnt put it in the data_dict, pie chart still isnt working, going to give up.
 
 # https://note.nkmk.me/en/python-pandas-value-counts/
 
