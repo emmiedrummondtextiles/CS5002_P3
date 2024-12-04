@@ -16,6 +16,14 @@
         "1": "Male",
         "2": "Female"
     },
+    "Ethnic_Group": {
+        "1": "White",
+        "2": "Mixed or multiple ethnic group",
+        "3": "Asian",
+        "4": "African",
+        "5": "Caribbean or black",
+        "6": "Other ethnic group"
+},
 
     "Age": {
         "1":"0 to 15",

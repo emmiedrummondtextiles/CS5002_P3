@@ -8,19 +8,19 @@ import matplotlib.pyplot as plt
 #https://www.geeksforgeeks.org/how-to-plot-bar-graph-in-python-using-csv-file
 #https://blog.finxter.com/5-effective-ways-to-visualize-csv-data-with-matplotlib-in-python/
 #https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html
+#https://www.slingacademy.com/article/pandas-understanding-dataframe-map-method-5-examples/
 
-csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\refined_Scotland_teaching_file_1PCT.csv"  # Update with the correct path if needed
+csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\refined_Scotland_teaching_file_1PCT.csv" 
 df = pd.read_csv(csv_path)
 
-print("Column names in CSV:", df.columns)
+print("Column names in CSV:", df.columns) #checking if the columns have succesfully loaded
 
 json_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\data_dictionary.json"
 with open(json_path, 'r') as file:
     data_dict = json.load(file)
 
-# Incorporating error handling for visualization
 if "age" not in df.columns:
-    print("Error: 'age' column not found in the dataset.")
+    print("Error: 'Age' column not found in the dataset.")
 
 if "Occupation" not in df.columns:
     print("Error: 'Occupation' column not found in CSV")
@@ -46,6 +46,8 @@ if "age" in df.columns and "Occupation" in df.columns:
         print("Error: 'Ethnic_Group' column not found in the dataset.")
 else:
     print("Error: 'Age' or 'Occupation' column not found in the dataset.")
+
+    #ethnicity was not working because i didnt put it in the data_dict
 
 # https://note.nkmk.me/en/python-pandas-value-counts/
 
@@ -100,7 +102,18 @@ def generate_graphs():
         print_pie_health()
         print_pie_ethnic_group()
     else:
-        print("Error: Unable to generate graphs due to missing data.")
+        print("Error: Unable to generate graphs due to missing data")
+
+
+    #easy requirement 2, based on https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+
+hours_industry_group = df.groupby(['Hours_Worked_Per_Week', 'industry']).size().reset_index(name='Record_Count')
+print("Number of records by hours worked per week and industry:")
+print(hours_industry_group)
+
+occupation_social_grade_group = df.groupby(['Occupation', 'Approximate_Social_Grade']).size().reset_index(name='Record_Count')
+print("\nnumber of records by occupation/approximate social grade:")
+print(occupation_social_grade_group)
 
 if __name__ == "__main__":
     generate_graphs()

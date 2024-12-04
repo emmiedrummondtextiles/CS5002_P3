@@ -20,7 +20,7 @@ def load_data(csv_path, json_path):
 def remove_duplicates_and_check_missing(df):
     df.replace('', np.nan, inplace=True) ##https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b
     df = df.drop_duplicates()  #https://www.geeksforgeeks.org/python-pandas-dataframe-drop_duplicates/
-    print(f"removed {len(df)} duplicate rows") 
+    print(f"removed {len(df)} duplicate rows")  
     
    # https://pandas.pydata.org/docs/user_guide/missing_data.html
     
@@ -67,8 +67,6 @@ def admissable_invalid_merge(df, data_dict):
 #https://datagy.io/pandas-map-apply/
 #https://www.geeksforgeeks.org/using-dictionary-to-remap-values-in-pandas-dataframe-columns
 
-#call everything into one funciton to convert, I will do admissable later as Im stuck
-
 # perform the descriptive analysis of the dataset:– determine the total number of records in the dataset;– determine the type of each variable in the dataset;– for each variable except “Record_Number” and “Region”, find all different values that
  #it takes, and the number of occurrences for each value,
 
@@ -82,7 +80,7 @@ def descriptive_analysis(df):
     print("\ndata types for each variable")
     print(df.dtypes)
 
-    # Find distinct values and their occurrence counts for each column apart from record number and region
+    #find distinct values and their occurrence counts for each column apart from record number and region
     for column in df.columns:
         if column not in ["record_number", "region"]:
             value_counts = df[column].value_counts(dropna=False) #https://stackoverflow.com/questions/68154806/count-nans-when-using-value-counts-on-a-dataframe
@@ -91,7 +89,6 @@ def descriptive_analysis(df):
 
 
 def clean_data():
-    # Specified paths for the dataset and data dictionary
     csv_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\Scotland_teaching_file_1PCT.csv"
     json_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\data_dictionary.json"
     output_path = r"C:\Users\Emmie\OneDrive - University of St Andrews\CS5002_P3\data\refined_Scotland_teaching_file_1PCT.csv"
